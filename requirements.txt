@@ -1,0 +1,9 @@
+# requirements.txt
+fastapi
+uvicorn
+sqlalchemy
+databases
+python-jose[cryptography]
+passlib[bcrypt]
+python-dotenv
+ 

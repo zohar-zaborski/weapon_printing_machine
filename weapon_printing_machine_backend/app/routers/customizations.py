@@ -8,7 +8,7 @@ from fastapi.security import OAuth2PasswordBearer
 from typing import List
 
 router = APIRouter()
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 
 def get_current_user_id(token: str = Depends(oauth2_scheme)) -> int:
     """

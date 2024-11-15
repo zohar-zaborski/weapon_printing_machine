@@ -7,7 +7,8 @@ from ..database import get_db
 router = APIRouter()
 
 # OAuth2 scheme for token validation
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+# Set the tokenUrl to "/auth/token" to match the correct route path for token generation
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 
 @router.post("/register", response_model=schemas.UserResponse)
 def register_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
@@ -21,7 +22,7 @@ def register_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
         )
     return crud.create_user(db=db, user=user)
 
-@router.post("/login", response_model=schemas.Token)
+@router.post("/token", response_model=schemas.Token)  # Token generation happens here
 def login(
     form_data: OAuth2PasswordRequestForm = Depends(), 
     db: Session = Depends(get_db)

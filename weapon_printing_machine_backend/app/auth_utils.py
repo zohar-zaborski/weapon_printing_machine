@@ -8,7 +8,7 @@ from .config import settings
 # Set up password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")  # OAuth2 token scheme
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")  # OAuth2 token scheme
 
 def hash_password(password: str) -> str:
     """

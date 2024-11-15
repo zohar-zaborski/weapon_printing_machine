@@ -8,7 +8,7 @@ from typing import List
 router = APIRouter()
 
 # OAuth2 scheme to retrieve the token from the Authorization header
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 
 # Dependency to retrieve the current user from the token
 def get_current_user(

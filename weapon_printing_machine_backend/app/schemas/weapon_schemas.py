@@ -1,19 +1,25 @@
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, field_validator
 from typing import List
+from pydantic.config import ConfigDict
 
 
 class WeaponBase(BaseModel):
     name: str
-    compatible_parts: List[str]  # Expecting a list for the response
+    compatible_parts: List[str]
 
-    @validator("compatible_parts", pre=True)
+    @field_validator("compatible_parts", mode="before")
     def split_compatible_parts(cls, value):
-        # If compatible_parts is a string, split it by commas into a list
+
         if isinstance(value, str):
             return value.split(",")
         return value
+
+    model_config = ConfigDict(from_attributes=True)
+
 
 class WeaponPart(BaseModel):
     type: str
     name: str
     compatible_weapons: List[str]
+
+    model_config = ConfigDict(from_attributes=True)

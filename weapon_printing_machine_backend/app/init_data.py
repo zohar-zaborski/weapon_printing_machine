@@ -2,13 +2,14 @@
 from sqlalchemy.orm import Session
 from .models import Weapon
 
-def initialize_weapon_data(db: Session):
+def initialize_weapon_data(db):
     predefined_weapons = [
-        Weapon(name="Assault Rifle", compatible_parts="scope,grip,magazine"),
-        Weapon(name="Sniper Rifle", compatible_parts="scope,barrel"),
-        Weapon(name="Shotgun", compatible_parts="barrel,stock"),
+        {"name": "Assault Rifle", "compatible_parts": "1,2,3"},
+        {"name": "Sniper Rifle", "compatible_parts": "2,4"},
+        {"name": "Shotgun", "compatible_parts": "1,3,5"},
     ]
+
     for weapon in predefined_weapons:
-        if not db.query(Weapon).filter(Weapon.name == weapon.name).first():
-            db.add(weapon)
+        if not db.query(Weapon).filter(Weapon.name == weapon["name"]).first():
+            db.add(Weapon(name=weapon["name"], compatible_parts=weapon["compatible_parts"]))
     db.commit()

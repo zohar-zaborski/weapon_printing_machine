@@ -1,6 +1,7 @@
-# app/schemas/print_job_schemas.py
 from pydantic import BaseModel
 from datetime import datetime
+from pydantic.config import ConfigDict
+
 
 class PrintJobResponse(BaseModel):
     id: int
@@ -8,5 +9,4 @@ class PrintJobResponse(BaseModel):
     status: str
     created_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

@@ -158,10 +158,20 @@ def delete_customization(db: Session, customization_id: int, user_id: int):
 
 
 # Print Job operations
-def create_print_job(db: Session, customization_id: int):
-    customization = db.query(models.CustomizedWeapon).filter(models.CustomizedWeapon.id == customization_id).first()
+
+# Print Job operations
+
+def create_print_job(db: Session, customization_id: int, user_id: int):
+    # Fetch the customization and check that it belongs to the user
+    customization = db.query(models.CustomizedWeapon).filter(
+        models.CustomizedWeapon.id == customization_id,
+        models.CustomizedWeapon.user_id == user_id  # Ensure the customization belongs to the user
+    ).first()
+    
     if not customization:
-        return None  # Handle missing customization in the endpoint
+        return None  # Handle missing customization or mismatch with the user
+    
+    # Create a new print job
     db_print_job = models.PrintJob(customized_weapon_id=customization_id)
     db.add(db_print_job)
     db.commit()
@@ -169,16 +179,29 @@ def create_print_job(db: Session, customization_id: int):
     return db_print_job
 
 
-def get_all_print_jobs(db: Session):
-    return db.query(models.PrintJob).all()
+
+def get_all_print_jobs(db: Session, user_id: int):
+    # Fetch all print jobs that belong to the user
+    return db.query(models.PrintJob).join(models.CustomizedWeapon).filter(
+        models.CustomizedWeapon.user_id == user_id  # Filter by the user's customizations
+    ).all()
 
 
-def get_print_job_by_id(db: Session, job_id: int):
-    return db.query(models.PrintJob).filter(models.PrintJob.id == job_id).first()
+def get_print_job_by_id(db: Session, job_id: int, user_id: int):
+    # Fetch a print job by ID and ensure it belongs to the user
+    return db.query(models.PrintJob).join(models.CustomizedWeapon).filter(
+        models.PrintJob.id == job_id,
+        models.CustomizedWeapon.user_id == user_id  # Ensure the print job is linked to the user
+    ).first()
 
 
-def update_print_job_status(db: Session, job_id: int, status: str):
-    db_print_job = db.query(models.PrintJob).filter(models.PrintJob.id == job_id).first()
+def update_print_job_status(db: Session, job_id: int, status: str, user_id: int):
+    # Fetch the print job and ensure it belongs to the user
+    db_print_job = db.query(models.PrintJob).join(models.CustomizedWeapon).filter(
+        models.PrintJob.id == job_id,
+        models.CustomizedWeapon.user_id == user_id  # Ensure the print job belongs to the user
+    ).first()
+    
     if db_print_job:
         db_print_job.status = status
         db.commit()

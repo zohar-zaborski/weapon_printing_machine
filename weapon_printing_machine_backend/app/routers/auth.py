@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
+from jose import JWTError
 from .. import crud, schemas, auth_utils
 from ..database import get_db
 
@@ -40,6 +41,24 @@ def login(
     # Generate a token with the user's ID and username
     access_token = auth_utils.create_access_token(data={"user_id": user.id, "sub": user.username})
     return {"access_token": access_token, "token_type": "bearer"}
+
+def get_current_user(token: str = Depends(oauth2_scheme)):
+    try:
+        payload = auth_utils.decode_access_token(token)
+        username = payload.get("sub")
+        if username is None:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Could not validate credentials",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        return payload
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid token",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
 
 @router.get("/me", response_model=schemas.UserResponse)
 def read_users_me(

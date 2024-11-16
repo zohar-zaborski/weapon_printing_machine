@@ -6,4 +6,4 @@ databases
 python-jose[cryptography]
 passlib[bcrypt]
 python-dotenv
- 
+jose

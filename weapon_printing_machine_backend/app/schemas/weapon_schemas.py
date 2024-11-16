@@ -18,6 +18,7 @@ class WeaponBase(BaseModel):
 
 
 class WeaponPart(BaseModel):
+    id: int
     type: str
     name: str
     compatible_weapons: List[str]

@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordBearer
 from .. import schemas, crud, auth_utils
 from ..database import get_db  # Import get_db from database.py
-
+from app.models import WeaponPart  # Import the SQLAlchemy model
 router = APIRouter()
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
@@ -58,24 +58,45 @@ def get_weapon(
 
 @router.get("/parts", response_model=list[schemas.WeaponPart])
 def get_parts(
-    db: Session = Depends(get_db), 
+    db: Session = Depends(get_db),
     current_user: schemas.UserResponse = Depends(get_current_user)
 ):
     """
     Get all weapon parts. Requires authentication.
     """
-    return crud.get_all_parts(db=db)
+    weapon_parts = crud.get_all_parts(db=db)
+
+    # Transform the compatible_weapons field from CSV to list
+    transformed_parts = [
+        schemas.WeaponPart(
+            id=part.id,
+            type=part.type,
+            name=part.name,
+            compatible_weapons=part.compatible_weapons.split(",")  # Convert CSV to list
+        )
+        for part in weapon_parts
+    ]
+
+    return transformed_parts
+
 
 @router.get("/parts/{part_id}", response_model=schemas.WeaponPart)
-def get_part(
-    part_id: int, 
-    db: Session = Depends(get_db), 
-    current_user: schemas.UserResponse = Depends(get_current_user)
+def get_part_by_id(
+    part_id: int,
+    db: Session = Depends(get_db),
 ):
     """
-    Get a specific weapon part by ID. Requires authentication.
+    Get a specific weapon part by ID.
     """
-    part = crud.get_part_by_id(db=db, part_id=part_id)
+    # Use the SQLAlchemy model for querying
+    part = db.query(WeaponPart).filter(WeaponPart.id == part_id).first()
     if part is None:
         raise HTTPException(status_code=404, detail="Part not found")
-    return part
+
+    # Transform the SQLAlchemy model to the Pydantic schema
+    return WeaponPart(
+        id=part.id,
+        type=part.type,
+        name=part.name,
+        compatible_weapons=part.compatible_weapons.split(",")  # Convert CSV to list
+    )

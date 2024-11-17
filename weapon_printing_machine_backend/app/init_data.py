@@ -3,9 +3,9 @@ from .models import Weapon, WeaponPart
 
 def initialize_weapon_data(db: Session):
     predefined_weapons = [
-        {"name": "Assault Rifle", "compatible_parts": "1,2,3"},
-        {"name": "Sniper Rifle", "compatible_parts": "2,4"},
-        {"name": "Shotgun", "compatible_parts": "1,3,5"},
+        {"name": "Glock 17", "compatible_parts": "1,4,7,10"},
+        {"name": "M4", "compatible_parts": "2,3,5,8,11"},
+        {"name": "FN Minimi", "compatible_parts": "3,6,9,12"},
     ]
 
     for weapon in predefined_weapons:

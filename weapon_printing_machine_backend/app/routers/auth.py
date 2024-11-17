@@ -23,7 +23,7 @@ def register_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
         )
     return crud.create_user(db=db, user=user)
 
-@router.post("/token", response_model=schemas.Token)  # Token generation happens here
+@router.post("/token", response_model=schemas.Token)
 def login(
     form_data: OAuth2PasswordRequestForm = Depends(), 
     db: Session = Depends(get_db)
@@ -31,16 +31,33 @@ def login(
     """
     Endpoint to authenticate and log in a user, returning an access token.
     """
+    # Fetch the user by username
     user = crud.get_user_by_username(db, username=form_data.username)
-    if not user or not auth_utils.verify_password(form_data.password, user.password):
+    print(f"Fetched user: {user}")
+    if not user:
+        print("User not found")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    # Generate a token with the user's ID and username
+
+    # Verify the password
+    print(f"Stored hashed password: {user.password}")
+    print(f"Plain password: {form_data.password}")
+    if not auth_utils.verify_password(form_data.password, user.password):
+        print("Password verification failed")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    # Generate access token
     access_token = auth_utils.create_access_token(data={"user_id": user.id, "sub": user.username})
+    print(f"Access token created: {access_token}")
     return {"access_token": access_token, "token_type": "bearer"}
+
 
 def get_current_user(token: str = Depends(oauth2_scheme)):
     try:

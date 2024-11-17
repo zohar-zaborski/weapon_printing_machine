@@ -1,14 +1,14 @@
 import sqlite3
 
 # Path to your database file
-db_path = "./test.db"
+db_path = "./app.db"
 
 # Connect to the database
 conn = sqlite3.connect(db_path)
 cursor = conn.cursor()
 
 # Run the query
-cursor.execute("SELECT * FROM sqlite_master WHERE type='table';")
+cursor.execute("SELECT username, email, password FROM users WHERE username = 'adi';")
 rows = cursor.fetchall()
 
 # Print the results

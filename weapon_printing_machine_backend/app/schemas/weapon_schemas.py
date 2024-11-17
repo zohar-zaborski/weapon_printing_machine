@@ -4,6 +4,7 @@ from pydantic.config import ConfigDict
 
 
 class WeaponBase(BaseModel):
+    id: int
     name: str
     compatible_parts: List[str]
 

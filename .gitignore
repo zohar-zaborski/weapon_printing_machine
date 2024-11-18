@@ -5,3 +5,5 @@ venv/
 ENV/
 env/
 .venv/
+test.db
+app.db

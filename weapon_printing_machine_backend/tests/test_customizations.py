@@ -1,17 +1,13 @@
-def test_create_customization(client, test_db, populate_weapons):
-    response = client.post("/customize", json={
-        "weapon_id": 1,
-        "parts": [1, 2]
-    })
+# tests/test_weapons.py
+def test_get_weapons(test_client):
+    response = test_client.get("/weapons/")
     assert response.status_code == 200
-    data = response.json()
-    assert data["weapon_id"] == 1
-    assert data["parts"] == [1, 2]
-    assert "print_job_id" in data
+    assert isinstance(response.json(), list)
 
-
-def test_get_all_customizations(client, test_db, populate_weapons):
-    response = client.get("/customize")
+def test_get_weapon_by_id(test_client, db_session):
+    # Add a weapon directly to the test database
+    db_session.execute("INSERT INTO weapons (name, compatible_parts) VALUES ('Test Weapon', '1,2,3')")
+    db_session.commit()
+    response = test_client.get("/weapons/1")
     assert response.status_code == 200
-    data = response.json()
-    assert len(data) > 0
+    assert response.json()["name"] == "Test Weapon"

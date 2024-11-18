@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
-from .models import Weapon, WeaponPart
+from .models import User, Weapon, WeaponPart
+from .auth_utils import hash_password  # Import the password hashing utility
 
 def initialize_weapon_data(db: Session):
     predefined_weapons = [
@@ -45,3 +46,24 @@ def initialize_weapon_parts_data(db: Session):
             existing_part.compatible_weapons = part["compatible_weapons"]
 
     db.commit()
+
+def initialize_admin_user(db: Session):
+    """
+    Ensure an admin user exists in the database. If not, create one.
+    """
+    admin_username = "admin"
+    admin_password = "admin"  # Default password for demonstration purposes
+
+    existing_admin = db.query(User).filter(User.username == admin_username).first()
+    if not existing_admin:
+        hashed_password = hash_password(admin_password)
+        admin_user = User(
+            username=admin_username,
+            email="admin@example.com",
+            password=hashed_password,
+        )
+        db.add(admin_user)
+        db.commit()
+        
+   
+        

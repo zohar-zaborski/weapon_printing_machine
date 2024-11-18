@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from sqlalchemy.orm import Session
 from .database import engine, Base, get_db, SessionLocal
 from .routers import auth, customizations, weapons, print_jobs
-from .init_data import initialize_weapon_data, initialize_weapon_parts_data
+from .init_data import initialize_admin_user, initialize_weapon_data, initialize_weapon_parts_data
 from fastapi.middleware.cors import CORSMiddleware
 from .models import Weapon, WeaponPart  # Add your model import for checking data existence
 
@@ -42,7 +42,7 @@ def startup_event():
         # Initialize weapon parts data if not already initialized
         if not db.query(WeaponPart).first():  # Check if weapon parts exist
             initialize_weapon_parts_data(db)
-            
+        initialize_admin_user(db)
 # Application shutdown event (if needed)
 @app.on_event("shutdown")
 def shutdown_event():

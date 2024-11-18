@@ -40,25 +40,23 @@ def get_current_user(
 def send_to_print(
     customization_id: int,
     db: Session = Depends(get_db),
-    current_user: schemas.UserResponse = Depends(get_current_user),  # Ensure user is authenticated
+    current_user: schemas.UserResponse = Depends(get_current_user),  
 ):
     user_id = current_user.id  # Extract user ID from token
     customization = crud.get_customization_by_id(db=db, customization_id=customization_id, user_id=user_id)
     if customization is None:
         raise HTTPException(status_code=404, detail="Customization not found")
     
-    # Pass user_id to the create_print_job function
+    
     print_job = crud.create_print_job(db=db, customization_id=customization_id, user_id=user_id)
     return print_job
 
-# Get all print jobs for the authenticated user
 @router.get("/jobs", response_model=List[schemas.PrintJobResponse])
 def get_all_print_jobs(
     db: Session = Depends(get_db),
-    current_user: schemas.UserResponse = Depends(get_current_user),  # Ensure user is authenticated
+    current_user: schemas.UserResponse = Depends(get_current_user),  
 ):
     user_id = current_user.id  # Extract user ID from token
-    # Fetch all print jobs for the user
     print_jobs = crud.get_all_print_jobs(db=db, user_id=user_id)
     return print_jobs
 

@@ -36,7 +36,7 @@ class CustomizedWeapon(Base):
     print_job = relationship(
         "PrintJob",
         back_populates="customized_weapon",
-        foreign_keys="PrintJob.customized_weapon_id"  # Specify the foreign key
+        foreign_keys="PrintJob.customized_weapon_id"  # foreign key
     )
 
 class PrintJob(Base):
@@ -50,5 +50,5 @@ class PrintJob(Base):
     customized_weapon = relationship(
         "CustomizedWeapon",
         back_populates="print_job",
-        foreign_keys="PrintJob.customized_weapon_id"  # Specify the foreign key
+        foreign_keys="PrintJob.customized_weapon_id"  # foreign key
     )

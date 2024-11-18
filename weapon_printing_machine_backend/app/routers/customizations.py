@@ -6,7 +6,7 @@ from ..database import get_db
 from ..auth_utils import decode_access_token
 from fastapi.security import OAuth2PasswordBearer
 from typing import List
-
+from .auth import get_current_user
 router = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 

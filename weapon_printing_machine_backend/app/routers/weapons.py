@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordBearer
 from .. import schemas, crud, auth_utils
 from ..database import get_db  # Import get_db from database.py
-from app.models import WeaponPart  # Import the SQLAlchemy model
+from app.models import WeaponPart  
 router = APIRouter()
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
@@ -72,7 +72,7 @@ def get_parts(
             id=part.id,
             type=part.type,
             name=part.name,
-            compatible_weapons=part.compatible_weapons.split(",")  # Convert CSV to list
+            compatible_weapons=part.compatible_weapons.split(",") 
         )
         for part in weapon_parts
     ]
@@ -88,7 +88,6 @@ def get_part_by_id(
     """
     Get a specific weapon part by ID.
     """
-    # Use the SQLAlchemy model for querying
     part = db.query(WeaponPart).filter(WeaponPart.id == part_id).first()
     if part is None:
         raise HTTPException(status_code=404, detail="Part not found")
@@ -98,5 +97,5 @@ def get_part_by_id(
         id=part.id,
         type=part.type,
         name=part.name,
-        compatible_weapons=part.compatible_weapons.split(",")  # Convert CSV to list
+        compatible_weapons=part.compatible_weapons.split(",") 
     )

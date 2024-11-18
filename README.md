@@ -33,7 +33,42 @@ The backend is built using FastAPI, a modern and high-performance web framework 
 
 ## Project Structure
 The main components are organized as follows:
+```bash
+project/
+│   ├── ...
+├── app/
+│   ├── core/
+│   │   ├── ...
+│   ├── routers/
+│   │   ├── auth.py
+│   │   ├── customizations.py
+│   │   ├── print_jobs.py
+│   │   ├── weapons.py
+│   ├── schemas/
+│   │   ├── __init__.py
+│   │   ├── auth_utils.py
+│   ├── base.py
+│   ├── config.py
+│   ├── crud.py
+│   ├── database.py
+│   ├── init_data.py
+│   ├── main.py
+│   ├── models.py
+├── env/
+│   ├── ...
+├── tests/
+│   ├── __init__.py
+│   ├── add_test_data.py
+├── app.db
+├── test.db
+├── .gitignore
+├── README.md
+├── requirements-dev.txt
+├── requirements.txt
+├── .env
 
+
+```
 
 ## Setup Instructions
  - Python env version that was used: `3.12.1`
@@ -49,28 +84,40 @@ The main components are organized as follows:
     python3 -m venv myenv
     source env/bin/activate
     ```
-2. Define Python Path(if needed):
+3. Define Python Path(if needed):
     ```bash
     # On Windows
     $env:PYTHONPATH = "C:\path\to\your\project;$env:PYTHONPATH"
     # On macOS/Linux
     export PYTHONPATH="/path/to/your/project:$PYTHONPATH"
     ```
-3. Install dependencies:
+5. Install dependencies:
     ```bash
     pip install -r requirements.txt
     ```
-4. Installing test dependencies:
+6. Installing test dependencies:
     ```bash
     pip install -r requirements-dev.txt
     ```
-    
+7. add .env file to the root folder:
+```bash
+DATABASE_URL="sqlite:///./app.db"
+SECRET_KEY="your_secret_key"
+ALGORITHM="HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+
+```
 
 ## Usage
 In the main folder, run the fastapi app:
 ```bash 
 uvicorn app.main:app --reload
 ```
+there is a script `init_data.py` that will populate the server when it's up with weapons and parts data.
+There's a default user:
+username: `admin`
+password: `admin`
+You can also create one by yourself and logging in with it. 
 ## API endpoints in the server:
 ### Authentication
 `POST /auth/register` - Register a new user.

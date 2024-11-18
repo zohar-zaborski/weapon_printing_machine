@@ -58,7 +58,7 @@ project/
 │   ├── ...
 ├── tests/
 │   ├── __init__.py
-│   ├── add_test_data.py
+│   ├── test_auth.py
 ├── app.db
 ├── test.db
 ├── .gitignore
@@ -141,16 +141,17 @@ You can also create one by yourself and logging in with it.
 
 ## Tests
 Tests in the backend app:
-
+`test_auth.py` - tests the logging of the user.
 
 
 ## Further Elaboration
 - Possible Features Implementations:
-    `Advanced Exceptions`: Currently, the project utilizes a simple Exceptions configuration. Future enhancements could include a more advanced and customized exceptions.
-    `Adding Logging`:Managing backend with comprehensive logging can be very useful for tracking data and issues that may rise.
-    `Database Integration`: The project now relies on an in-memory repository for simplicity, but future versions could incorporate a database like PostgreSQL or MongoDB. This would support persistence, scalability, and more complex query capabilities for large policy and rule datasets. 
-    `More Fields`: Generating more "Real world" fields, like Unique ID of the weapon, a serial number. More fields:
+    - `Advanced Exceptions`: Currently, the project utilizes a simple Exceptions configuration. Future enhancements could include a more advanced and customized exceptions.
+    - `Adding Logging`:Managing backend with comprehensive logging can be very useful for tracking data and issues that may rise.
+    - `Database Integration`: The project now relies on an in-memory repository for simplicity, but future versions could incorporate a database like PostgreSQL or MongoDB. This would support persistence, scalability, and more complex query capabilities for large policy and rule datasets. 
+    - `More Fields`: Generating more "Real world" fields, like Unique ID of the weapon, a serial number. More fields:
                     Color, Magazine Size, etc.
+    - `More Tests` - I didn't manage to add more tests like I wanted because of the deadline, I have tested the api in Swagger and I know it works. but it is always mandatory for me to have tests to check that everything it working as planned, apologies.
 
 ## Output
 - POST /Customize -send a weapon with parts to saved customized weapons list:

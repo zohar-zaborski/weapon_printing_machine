@@ -32,7 +32,7 @@ def get_current_user(
         )
     return user
 
-@router.get("/weapons", response_model=list[schemas.WeaponBase])
+@router.get("/", response_model=list[schemas.WeaponBase])
 def get_weapons(
     db: Session = Depends(get_db), 
     current_user: schemas.UserResponse = Depends(get_current_user)

@@ -29,7 +29,7 @@ def add_test_data(db: Session):
         db.commit()
         db.refresh(db_print_job)
 
-        print(f"Added customization (ID: {db_customization.id}) and print job (ID: {db_print_job.id})")
+
 
 # Run the script
 if __name__ == "__main__":

@@ -8,7 +8,6 @@ from ..database import get_db
 router = APIRouter()
 
 # OAuth2 scheme for token validation
-# Set the tokenUrl to "/auth/token" to match the correct route path for token generation
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 
 @router.post("/register", response_model=schemas.UserResponse)
@@ -33,9 +32,9 @@ def login(
     """
     # Fetch the user by username
     user = crud.get_user_by_username(db, username=form_data.username)
-    print(f"Fetched user: {user}")
+    
     if not user:
-        print("User not found")
+        
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid username or password",
@@ -43,10 +42,9 @@ def login(
         )
 
     # Verify the password
-    print(f"Stored hashed password: {user.password}")
-    print(f"Plain password: {form_data.password}")
+   
     if not auth_utils.verify_password(form_data.password, user.password):
-        print("Password verification failed")
+       
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid username or password",
@@ -55,7 +53,7 @@ def login(
 
     # Generate access token
     access_token = auth_utils.create_access_token(data={"user_id": user.id, "sub": user.username})
-    print(f"Access token created: {access_token}")
+   
     return {"access_token": access_token, "token_type": "bearer"}
 
 

@@ -21,7 +21,7 @@ def get_current_user_id(token: str = Depends(oauth2_scheme)) -> int:
     return user_id
 
 # Create a new customization and optionally associate with a print job
-@router.post("/customize", response_model=schemas.CustomizationResponse)
+@router.post("/", response_model=schemas.CustomizationResponse)
 def customize_and_print(
     customization_data: schemas.CustomizationCreate,
     db: Session = Depends(get_db),
@@ -32,8 +32,7 @@ def customize_and_print(
     )
     return customization
 
-# Get all customizations
-@router.get("/customize", response_model=List[schemas.CustomizationResponse])
+@router.get("/", response_model=List[schemas.CustomizationResponse])
 def get_all_customizations(
     db: Session = Depends(get_db),
     user_id: int = Depends(get_current_user_id),
@@ -41,8 +40,7 @@ def get_all_customizations(
     customizations = crud.get_all_customizations(db, user_id=user_id)
     return customizations
 
-# Get a specific customization by ID
-@router.get("/customize/{customization_id}", response_model=schemas.CustomizationResponse)
+@router.get("/{customization_id}", response_model=schemas.CustomizationResponse)
 def get_customization(
     customization_id: int,
     db: Session = Depends(get_db),
@@ -55,8 +53,7 @@ def get_customization(
         raise HTTPException(status_code=404, detail="Customization not found")
     return customization
 
-# Update a customization by ID
-@router.put("/customize/{customization_id}", response_model=schemas.CustomizationResponse)
+@router.put("/{customization_id}", response_model=schemas.CustomizationResponse)
 def update_customization(
     customization_id: int,
     customization: schemas.CustomizationCreate,
@@ -71,7 +68,7 @@ def update_customization(
     return updated_customization
 
 # Delete a customization by ID
-@router.delete("/customize/{customization_id}")
+@router.delete("/{customization_id}")
 def delete_customization(
     customization_id: int,
     db: Session = Depends(get_db),

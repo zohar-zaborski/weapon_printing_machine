@@ -52,7 +52,7 @@ def send_to_print(
     return print_job
 
 # Get all print jobs for the authenticated user
-@router.get("/print/jobs", response_model=List[schemas.PrintJobResponse])
+@router.get("/jobs", response_model=List[schemas.PrintJobResponse])
 def get_all_print_jobs(
     db: Session = Depends(get_db),
     current_user: schemas.UserResponse = Depends(get_current_user),  # Ensure user is authenticated
@@ -63,7 +63,7 @@ def get_all_print_jobs(
     return print_jobs
 
 # Get a specific print job by ID
-@router.get("/print/jobs/{job_id}", response_model=schemas.PrintJobResponse)
+@router.get("/{job_id}", response_model=schemas.PrintJobResponse)
 def get_print_job(
     job_id: int,
     db: Session = Depends(get_db),
@@ -77,7 +77,7 @@ def get_print_job(
     return print_job
 
 # Update the status of a specific print job
-@router.put("/print/jobs/{job_id}", response_model=schemas.PrintJobResponse)
+@router.put("/{job_id}", response_model=schemas.PrintJobResponse)
 def update_print_job_status(
     job_id: int,
     status: str,

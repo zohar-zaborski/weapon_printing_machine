@@ -22,9 +22,9 @@ app.add_middleware(
 
 # Include routers
 app.include_router(auth.router, prefix="/auth", tags=["Authentication"])
-app.include_router(customizations.router, prefix="/customizations", tags=["Customizations"])
+app.include_router(customizations.router, prefix="/customize", tags=["Customizations"])
 app.include_router(weapons.router, prefix="/weapons", tags=["Weapons"])
-app.include_router(print_jobs.router, prefix="/print_jobs", tags=["Print Jobs"])
+app.include_router(print_jobs.router, prefix="/print-jobs", tags=["Print Jobs"])
 
 # Health check endpoint
 @app.get("/status")
